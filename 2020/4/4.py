@@ -1,5 +1,5 @@
 import argparse
-
+import json
 
 class Programme:
     def __init__(self, args):
@@ -8,68 +8,38 @@ class Programme:
         with open(FilePath, mode='r') as f:
             self.filelines = f.read().splitlines()
 
-    def run(self):
+    def run1(self):
         #ParseData
         rows = []
+        passports = []
+
         for line in self.filelines:
-            row = []
-            for place in line:
-                if place == '.':
-                    row.append(0)
-                elif place == '#':
-                    row.append(1)
-            rows.append(row)
-        # Proccess
-        maxHeight = len(rows)
-        MaxWidth = len(rows[0])
-        positionX = 0
-        positionY = 0
-        travel = [3,1]
+            if line == '':
+                passport = self.makePassport(rows)
+                passports.append(passport)
+                rows = []
+                continue
+            rows.append(line)
 
-        treeCount = 0
+        print(passports[0])
+        print(json.dumps(json.loads(passports[0]),indent=4))
 
-        while positionY < maxHeight:
-            #Check Position
-            treeCount = treeCount + rows[positionY][positionX]
-            positionX =(positionX + travel[0]) % MaxWidth
-            positionY =positionY + travel[1]
-            
-        print(treeCount)
-
+    def makePassport(self, data):
+        mString = ' '.join(data)
+        array = mString.split(' ')
+        newArray = []
+        for element in array:
+            string = "\"{0}\"".format(element.split(':')[0])+':'+"\"{0}\"".format(element.split(':')[1])
+            print (string)
+            newArray.append(string)
+        
+        return "{ \"data\": " + "{ {0} }".format(' , '.join(newArray)) + "}"
+    
     def run2(self):
-        #ParseData
-        rows = []
-        for line in self.filelines:
-            row = []
-            for place in line:
-                if place == '.':
-                    row.append(0)
-                elif place == '#':
-                    row.append(1)
-            rows.append(row)
-        total = 1
-        total = self.Test(rows, [1,1])
-        total = total * self.Test(rows, [3,1])
-        total = total * self.Test(rows, [5,1])
-        total = total * self.Test(rows, [7,1])
-        total = total * self.Test(rows, [1,2])
-
-        print(total)
+        pass
     
     def Test(self, rows, travel):
-        maxHeight = len(rows)
-        MaxWidth = len(rows[0])
-        positionX = 0
-        positionY = 0
-        treeCount = 0
-
-        while positionY < maxHeight:
-            #Check Position
-            treeCount = treeCount + rows[positionY][positionX]
-            positionX =(positionX + travel[0]) % MaxWidth
-            positionY =positionY + travel[1]
-
-        return treeCount
+        pass
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="")
@@ -80,4 +50,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     p = Programme(args)
-    p.run2()
+    p.run1()
