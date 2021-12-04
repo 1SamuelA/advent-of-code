@@ -1,13 +1,15 @@
 import argparse
 import json
 
+
+
 class Programme:
     def __init__(self, args):
         FilePath = args.FilePath
 
         with open(FilePath, mode='r') as f:
             self.filelines = f.read().splitlines()
-
+            
     def run1(self):
         #ParseData
         rows = []
